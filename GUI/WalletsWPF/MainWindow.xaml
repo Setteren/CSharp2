@@ -1,0 +1,29 @@
+﻿<Window x:Class="Wallets.GUI.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WalletsWPF"
+        xmlns:wpf="clr-namespace:Wallets.GUI.WPF"
+        xmlns:authentication="clr-namespace:Wallets.GUI.WPF.Authentication"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" FontSize="20">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" MinHeight="100"></RowDefinition>
+            <RowDefinition Height="3*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+           
+        </Grid.ColumnDefinitions>
+        
+        <!--Header -->
+        <wpf:Header></wpf:Header>
+
+
+            <!--Main Control -->
+      <wpf:MainView Grid.Row="1"></wpf:MainView>
+
+    </Grid>
+
+</Window>

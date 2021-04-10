@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="Wallets.GUI.WPF.Wallets.AddWalletView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Wallets.GUI.WPF.Wallets"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" IsEnabled="{Binding IsEnabled}">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" >
+        <StackPanel>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+
+
+
+
+                <StackPanel Grid.Row="0" Grid.Column="0">
+                    <TextBlock Margin=" 10,10,10,5">Name:</TextBlock>
+                    <TextBox  MinWidth="300" Margin="10" HorizontalAlignment="Stretch"  Text="{Binding Name}"></TextBox>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Grid.Column="0">
+                    <TextBlock Margin=" 10,10,10,5">Description:</TextBlock>
+                    <TextBox  MinWidth="300" Margin="10" HorizontalAlignment="Stretch"  Text="{Binding Description}"></TextBox>
+                </StackPanel>
+                <StackPanel Grid.Row="2" Grid.Column="0">
+                    <TextBlock Margin=" 10,10,10,5">Starting Balance:</TextBlock>
+                    <TextBox  MinWidth="300" Margin="10" HorizontalAlignment="Stretch"  Text="{Binding Balance}"></TextBox>
+                </StackPanel>
+                <StackPanel Grid.Row="3" Grid.Column="0">
+                    <TextBlock Margin=" 10,10,10,5">Main currency:</TextBlock>
+                    <ComboBox Name="CurrencyList" SelectedIndex="0"  Text="{Binding MainCurrency}" Margin=" 10,0,10,15"  VerticalAlignment="Top">
+                        <TextBlock>USD</TextBlock>
+                        <TextBlock>EUR</TextBlock>
+                        <TextBlock>UAH</TextBlock>
+                        <TextBlock>RUB</TextBlock>
+                    </ComboBox>
+                </StackPanel>
+
+                <Button Grid.Row="4" Grid.Column="0" Name="ButtonAddWallet" Command="{Binding AddWalletCommand}">Add</Button>
+                <Button Grid.Row="5" Grid.Column="0" Command="{Binding WalletViewCommand}">Back to wallets</Button>
+
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+
+
+</UserControl>
