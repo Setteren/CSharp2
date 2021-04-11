@@ -6,10 +6,9 @@
              xmlns:local="clr-namespace:Wallets.GUI.WPF"
              mc:Ignorable="d">
 
-    <Border  Background="DarkOrchid">
+    <Border  Background="LightGray">
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Image Source="Images/Wallet.png" Height="80" Stretch="Uniform" Margin="5"></Image>
-            <TextBlock Text="Wallets" FontSize="36" Margin="5" VerticalAlignment="Center"></TextBlock>
+            <TextBlock Text="WalletMaker" FontSize="36" Margin="5" VerticalAlignment="Center"></TextBlock>
         </StackPanel>
     </Border>
 </UserControl>

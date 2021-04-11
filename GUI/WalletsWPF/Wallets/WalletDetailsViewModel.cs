@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Prism.Commands;
+using Prism.Mvvm;
+using System;
 using System.Threading.Tasks;
 using System.Windows;
-using Prism.Commands;
-using Prism.Mvvm;
 using Wallets.BusinessLayer;
 
 namespace Wallets.GUI.WPF.Wallets
 {
-    public class WalletDetailsViewModel: BindableBase
+    public class WalletDetailsViewModel : BindableBase
     {
         private Wallet _wallet;
         private decimal _usdAmount;
@@ -46,7 +46,7 @@ namespace Wallets.GUI.WPF.Wallets
             set
             {
                 _wallet.Name = value;
-            //    RaisePropertyChanged(nameof(DisplayName));
+                //    RaisePropertyChanged(nameof(DisplayName));
             }
         }
 
@@ -60,8 +60,8 @@ namespace Wallets.GUI.WPF.Wallets
             set
             {
                 _wallet.Balance = value;
-                    // TbBalance.Text = value;
-            //    RaisePropertyChanged(nameof(DisplayName));
+                // TbBalance.Text = value;
+                //    RaisePropertyChanged(nameof(DisplayName));
             }
         }
 
@@ -75,7 +75,7 @@ namespace Wallets.GUI.WPF.Wallets
             set
             {
                 _wallet.Description = value;
-            //    RaisePropertyChanged(nameof(DisplayName));
+                //    RaisePropertyChanged(nameof(DisplayName));
             }
         }
 
@@ -87,25 +87,26 @@ namespace Wallets.GUI.WPF.Wallets
             }
             set
             {
-                if (value == Currency.USD) { _wallet.Balance = _usdAmount; RaisePropertyChanged(nameof(Balance));}
+                if (value == Currency.USD) { _wallet.Balance = _usdAmount; RaisePropertyChanged(nameof(Balance)); }
                 if (value == Currency.EUR) { _wallet.Balance = _eurAmount; RaisePropertyChanged(nameof(Balance)); }
                 if (value == Currency.UAH) { _wallet.Balance = _uahAmount; RaisePropertyChanged(nameof(Balance)); }
                 if (value == Currency.RUB) { _wallet.Balance = _rubAmount; RaisePropertyChanged(nameof(Balance)); }
 
                 _wallet.MainCurrency = value;
-              //  RaisePropertyChanged(nameof(DisplayName));
+                //  RaisePropertyChanged(nameof(DisplayName));
             }
         }
 
 
         public string DisplayName
         {
-            get {
+            get
+            {
                 return $"{_wallet.Name} ({_wallet.Balance} {_wallet.MainCurrency})";
             }
         }
 
-      
+
 
         public WalletDetailsViewModel(Wallet wallet)
         {

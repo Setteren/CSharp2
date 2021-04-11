@@ -1,12 +1,11 @@
 ﻿
+using Prism.Commands;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
-using Prism.Commands;
 using Wallets.BusinessLayer;
-using Wallets.GUI.WPF.Annotations;
 using Wallets.GUI.WPF.Navigation;
 using Wallets.Models.Users;
 using Wallets.Services;
@@ -56,7 +55,7 @@ namespace Wallets.GUI.WPF.Authentication
                     OnPropertyChanged(nameof(Login));
                     SignUpCommand.RaiseCanExecuteChanged();
                 }
-               
+
             }
         }
 
@@ -137,39 +136,39 @@ namespace Wallets.GUI.WPF.Authentication
         public SignUpViewModel(Action gotoSignIn)
         {
             SignUpCommand = new DelegateCommand(SignUp, IsSignUpEnabled);
-            CloseCommand = new DelegateCommand(()=>Environment.Exit(0));
+            CloseCommand = new DelegateCommand(() => Environment.Exit(0));
             _gotoSignIn = gotoSignIn;
             SignInCommand = new DelegateCommand(_gotoSignIn);
         }
 
         private bool IsSignUpEnabled()
         {
-            
+
             return !String.IsNullOrWhiteSpace(Login) && !String.IsNullOrWhiteSpace(Password) && !String.IsNullOrWhiteSpace(LastName) && !String.IsNullOrWhiteSpace(FirstName) && !String.IsNullOrWhiteSpace(Email);
         }
 
         private async void SignUp()
         {
             var authService = new AuthenticationService();
-                Client user = null;
-                try
-                {
-                    IsEnabled = false; 
-                    await Task.Run(()=>authService.RegistrateUser(_regUser));
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Sign up failed {ex.Message}");
-                    return;
-                }
-                finally // is done independently from exception
-                {
-                    IsEnabled = true;
-                }
-                 MessageBox.Show("User successfully registered, please Sign In.");
-                _gotoSignIn.Invoke();
+            Client user = null;
+            try
+            {
+                IsEnabled = false;
+                await Task.Run(() => authService.RegistrateUser(_regUser));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Sign up failed {ex.Message}");
+                return;
+            }
+            finally // is done independently from exception
+            {
+                IsEnabled = true;
+            }
+            MessageBox.Show("User successfully registered, please Sign In.");
+            _gotoSignIn.Invoke();
 
-            
+
         }
 
 

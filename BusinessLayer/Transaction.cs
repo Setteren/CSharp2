@@ -24,7 +24,7 @@ namespace Wallets.BusinessLayer
         public Guid WalletGuid { get => _walletGuid; private set => _walletGuid = value; }
         public List<string> Files { get => _files; set => _files = value; }
 
-        public Transaction(Guid walletGuid, decimal moneyAmount, Currency? currency, Category category, string description, List<string> files,DateTime date)
+        public Transaction(Guid walletGuid, decimal moneyAmount, Currency? currency, Category category, string description, List<string> files, DateTime date)
         {
             _guid = Guid.NewGuid();
 
@@ -41,13 +41,13 @@ namespace Wallets.BusinessLayer
         {
             var result = true;
 
-            if (WalletGuid==Guid.Empty)
+            if (WalletGuid == Guid.Empty)
                 result = false;
             if (Currency == null)
                 result = false;
-            if (Category==null)
+            if (Category == null)
                 result = false;
-            if (MoneyAmount==0)
+            if (MoneyAmount == 0)
                 result = false;
 
             return result;

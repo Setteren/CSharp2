@@ -1,12 +1,11 @@
 ﻿
 
+using Prism.Commands;
+using Prism.Mvvm;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Media.Imaging;
-using Prism.Commands;
-using Prism.Mvvm;
 using Wallets.BusinessLayer;
 using Wallets.GUI.WPF.Navigation;
 using Wallets.Services;
@@ -15,8 +14,8 @@ namespace Wallets.GUI.WPF.Wallets
 {
     public class WalletsViewModel : BindableBase, INavigatable<MainNavigatableTypes>
     {
-        public static WalletService _service=new WalletService();
-        private  WalletDetailsViewModel _currentWallet;
+        public static WalletService _service = new WalletService();
+        private WalletDetailsViewModel _currentWallet;
         private Action _gotoSignIn;
         private Action _gotoAddWallet;
         private bool _isEnabled = true;
@@ -40,9 +39,9 @@ namespace Wallets.GUI.WPF.Wallets
 
         public WalletDetailsViewModel CurrentWallet
         {
-            get { return _currentWallet;}
+            get { return _currentWallet; }
             set
-            { 
+            {
                 _currentWallet = value;
                 RaisePropertyChanged();
             }
@@ -57,18 +56,18 @@ namespace Wallets.GUI.WPF.Wallets
 
             AddWalletCommand = new DelegateCommand(_gotoAddWallet);
             SignInCommand = new DelegateCommand(_gotoSignIn);
-            
+
             DeleteWalletCommand = new DelegateCommand(DeleteWallet);
             CloseCommand = new DelegateCommand(() => Environment.Exit(0));
         }
 
         public static void UpdateWalletsCollection()
         {
-      
+
             Wallets.Clear();
             foreach (Wallet wallet in _service.GetWallets())
             {
-                if (wallet.OwnerGuid == CurrentInformation.User.Guid)
+                if (wallet.OwnerGuid == MainInfo.User.Guid)
                 {
                     Wallets.Add(new WalletDetailsViewModel(wallet));
                 }
@@ -81,14 +80,14 @@ namespace Wallets.GUI.WPF.Wallets
         public DelegateCommand CloseCommand { get; }
 
 
-        
 
-        public async  void DeleteWallet()
+
+        public async void DeleteWallet()
         {
             try
             {
                 IsEnabled = false;
-                await Task.Run(()=>_service.DeleteWallet(CurrentWallet.FromWallet));
+                await Task.Run(() => _service.DeleteWallet(CurrentWallet.FromWallet));
                 Wallets.Remove(CurrentWallet);
             }
             catch (Exception ex)
@@ -102,7 +101,8 @@ namespace Wallets.GUI.WPF.Wallets
             }
         }
 
-        public MainNavigatableTypes Type {
+        public MainNavigatableTypes Type
+        {
             get
             {
                 return MainNavigatableTypes.Wallets;
@@ -115,7 +115,7 @@ namespace Wallets.GUI.WPF.Wallets
         }
 
 
-     
+
 
     }
 }

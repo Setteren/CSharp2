@@ -5,7 +5,7 @@ namespace Wallets.BusinessLayer
 {
     public class Category : EntityBase
     {
-       
+
 
         private Guid _guid;
         private string _name;

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Prism.Commands;
+using Prism.Mvvm;
+using System;
 using System.Threading.Tasks;
 using System.Windows;
-using Prism.Commands;
-using Prism.Mvvm;
 using Wallets.BusinessLayer;
 using Wallets.GUI.WPF.Navigation;
 using Wallets.Services;
@@ -16,12 +13,12 @@ namespace Wallets.GUI.WPF.Wallets
     public class AddWalletViewModel : BindableBase, INavigatable<MainNavigatableTypes>
     {
         private WalletService _service;
-       
+
         private Action _gotoWallets;
         private Wallet _wallet;
         private bool _isEnabled = true;
 
-        
+
 
 
         public bool IsEnabled
@@ -91,10 +88,10 @@ namespace Wallets.GUI.WPF.Wallets
             }
         }
 
-    
+
         public AddWalletViewModel(Action gotoWallets)
         {
-            _wallet = new Wallet(Guid.NewGuid(),"",0.0m,"",Currency.USD);
+            _wallet = new Wallet(Guid.NewGuid(), "", 0.0m, "", Currency.USD);
 
             _service = new WalletService();
             _gotoWallets = gotoWallets;
@@ -106,10 +103,10 @@ namespace Wallets.GUI.WPF.Wallets
         public DelegateCommand AddWalletCommand { get; }
 
 
-        //TODO: MAKE ADDING WALLET REALLY ASYNC
+
         public async void AddWallet()
         {
-           
+
 
             try
             {
@@ -122,10 +119,10 @@ namespace Wallets.GUI.WPF.Wallets
                 }
 
                 Wallet addWallet = new Wallet(Guid.NewGuid(), _wallet.Name, _wallet.Balance, _wallet.Description, _wallet.MainCurrency);
-                addWallet.OwnerGuid = CurrentInformation.User.Guid;
+                addWallet.OwnerGuid = MainInfo.User.Guid;
                 await Task.Run(() => _service.AddOrUpdateWalletAsync(addWallet));
                 WalletsViewModel.Wallets.Add(new WalletDetailsViewModel(addWallet));
-                CurrentInformation.User.Wallets.Add(addWallet);
+                MainInfo.User.Wallets.Add(addWallet);
                 MessageBox.Show($"Wallet {addWallet.Name} added to the list of wallets!");
             }
             catch (Exception ex)
@@ -161,8 +158,8 @@ namespace Wallets.GUI.WPF.Wallets
         }
 
 
-       //public delegate void AddWalletMethod();
-       // public event AddWalletMethod addWall;
+        //public delegate void AddWalletMethod();
+        // public event AddWalletMethod addWall;
 
 
     }

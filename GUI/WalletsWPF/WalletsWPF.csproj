@@ -9,10 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Images\Wallet.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Prism.Core" Version="8.0.0.1909" />
   </ItemGroup>
 
@@ -20,10 +16,6 @@
     <ProjectReference Include="..\..\BusinessLayer\BusinessLayer.csproj" />
     <ProjectReference Include="..\..\Models\Models.csproj" />
     <ProjectReference Include="..\..\Services\Services.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Images\Wallet.png" />
   </ItemGroup>
 
   <ItemGroup>

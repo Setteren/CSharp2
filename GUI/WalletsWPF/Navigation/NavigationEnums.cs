@@ -15,6 +15,6 @@ namespace Wallets.GUI.WPF.Navigation
         AddWallet
     }
 
-  
-   
+
+
 }

@@ -9,10 +9,10 @@ namespace Wallets.BusinessLayer
         UAH,
         RUB
     };
-    
-        public static class Converter
-        {
-        private static Dictionary<Currency,decimal> _convert = new Dictionary<Currency, decimal>
+
+    public static class Converter
+    {
+        private static Dictionary<Currency, decimal> _convert = new Dictionary<Currency, decimal>
         {
             [Currency.USD] = 1m,
             [Currency.EUR] = 0.84m,
@@ -20,13 +20,13 @@ namespace Wallets.BusinessLayer
             [Currency.RUB] = 77.43m
         };
 
-        public static Dictionary<Currency, decimal> Convert {get => _convert;}
+        public static Dictionary<Currency, decimal> Convert { get => _convert; }
 
         public static decimal СomputeTheCoefficient(Currency? currencyFrom, Currency? currencyTo)
         {
             decimal from = Converter.Convert[currencyFrom.Value];
             decimal to = Converter.Convert[currencyTo.Value];
-            return to/from;
+            return to / from;
         }
 
     }

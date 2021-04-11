@@ -1,12 +1,11 @@
 ﻿
+using Prism.Commands;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
-using Prism.Commands;
 using Wallets.BusinessLayer;
-using Wallets.GUI.WPF.Annotations;
 using Wallets.GUI.WPF.Navigation;
 using Wallets.GUI.WPF.Wallets;
 using Wallets.Models.Users;
@@ -35,7 +34,7 @@ namespace Wallets.GUI.WPF.Authentication
             }
         }
 
-        
+
         public string Login
         {
             get
@@ -50,7 +49,7 @@ namespace Wallets.GUI.WPF.Authentication
                     OnPropertyChanged(nameof(Login));
                     SignInCommand.RaiseCanExecuteChanged();
                 }
-               
+
             }
         }
 
@@ -88,7 +87,7 @@ namespace Wallets.GUI.WPF.Authentication
 
         private bool IsSignInEnabled()
         {
-            
+
             return !String.IsNullOrWhiteSpace(Login) && !String.IsNullOrWhiteSpace(Password);
         }
 
@@ -100,13 +99,13 @@ namespace Wallets.GUI.WPF.Authentication
             }
             else
             {
-              
+
                 var authService = new AuthenticationService();
                 Client user = null;
                 try
                 {
                     IsEnabled = false;
-                    user = await Task.Run( ()=>authService.Authenticate(_authUser));
+                    user = await Task.Run(() => authService.Authenticate(_authUser));
                 }
                 catch (Exception ex)
                 {
@@ -131,7 +130,7 @@ namespace Wallets.GUI.WPF.Authentication
             }
         }
 
-    
+
 
         public void ClearSensitiveData()
         {
@@ -147,6 +146,6 @@ namespace Wallets.GUI.WPF.Authentication
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-     
+
     }
 }
