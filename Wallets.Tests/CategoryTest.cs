@@ -3,16 +3,17 @@ using System.Drawing;
 using Wallets.BusinessLayer;
 using Xunit;
 
-namespace TestWPF
+namespace Wallets.Tests
 {
     public class CategoryTest
     {
-    
+
+      
         [Fact]
         public void ValidateValid()
         {
             //Arrange
-            Category valid = new Category(Guid.NewGuid(), "business", "description here...", System.Drawing.Color.White, null);
+            Category valid = new Category(Guid.NewGuid(), "business", "description here...", new ColorWrapper(System.Drawing.Color.White), null, Guid.NewGuid());
 
             //Act
             var actual = valid.Validate();
@@ -26,7 +27,7 @@ namespace TestWPF
         public void ValidateBadName()
         {
             //Arrange
-            Category invalidName = new Category(Guid.NewGuid(), "  ", "description here...", System.Drawing.Color.White, null);
+            Category invalidName = new Category(Guid.NewGuid(), " ", "description here...", new ColorWrapper(System.Drawing.Color.White), null, Guid.NewGuid());
 
             //Act
             var actual = invalidName.Validate();

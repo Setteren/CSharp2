@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using Microsoft.VisualBasic;
 using Wallets.DataStorage;
 
 namespace Wallets.BusinessLayer
@@ -7,205 +10,144 @@ namespace Wallets.BusinessLayer
     public class Wallet : EntityBase, IStorable
 
     {
-        private static int _instanceCountWallets = 0;
+    private static int _instanceCountWallets = 0;
 
-        private Guid _guid;
-        private string _name;
-        private decimal _startingBalance;
-        private string _description;
-        private Currency? _mainCurrency;
-        private List<Transaction> _transactions;
-        private List<Category> _categories;
-        private decimal _balance;
+    private Guid _guid;
+    private string _name;
+    private decimal _startingBalance;
+    private string _description;
+    private Currency? _mainCurrency;
+    private ObservableCollection<Transaction> _transactions;
+    private ObservableCollection<Category> _categories;
+    private decimal _balance;
 
-        private Guid _ownerGuid;
-        private List<Guid> _coOwnersGuid;
+    private Guid _ownerGuid;
+    private List<Guid> _coOwnersGuid;
 
-        public Guid Guid
-        {
-            get => _guid;
-            set => _guid = value;
+    public Guid Guid
+    {
+        get => _guid;
+        set => _guid = value;
+    }
+
+    public string Name
+    {
+        get => _name;
+        set => _name = value;
+    }
+
+    public decimal StartingBalance
+    {
+        get => _startingBalance;
+        private set => _startingBalance = value;
+    }
+
+    public string Description
+    {
+        get => _description;
+        set => _description = value;
+    }
+
+    public Currency? MainCurrency
+    {
+        get => _mainCurrency;
+        set => _mainCurrency = value;
+    }
+
+    public ObservableCollection<Transaction> Transactions
+    {
+        get
+        { 
+        return _transactions;
         }
+        set => _transactions = value;
+    }
 
-        public string Name
-        {
-            get => _name;
-            set => _name = value;
-        }
+    
+    public ObservableCollection<Category> Categories
+    {
+        get => _categories; 
+        set => _categories = value;
+    }
 
-        public decimal StartingBalance
-        {
-            get => _startingBalance;
-            private set => _startingBalance = value;
-        }
+    public decimal Balance
+    {
+        get => _balance;
+        set => _balance = value;
+    }
 
-        public string Description
-        {
-            get => _description;
-            set => _description = value;
-        }
+    public Guid OwnerGuid
+    {
+        get => _ownerGuid;
+        set => _ownerGuid = value;
+    }
 
-        public Currency? MainCurrency
-        {
-            get => _mainCurrency;
-            set => _mainCurrency = value;
-        }
+    public List<Guid> CoOwnersGuid
+    {
+        get => _coOwnersGuid;
+    }
 
-        public List<Transaction> Transactions
+    public Wallet(Guid ownerGuid, string name, decimal startingBalance, string description, Currency? mainCurrency, ObservableCollection<Transaction> transactions,
+        ObservableCollection<Category> categories, List<Guid> coOwnersGuid)
+    {
+        _guid = Guid.NewGuid();
+        _ownerGuid = ownerGuid;
+        _name = name;
+        _startingBalance = startingBalance;
+        _description = description;
+        _mainCurrency = mainCurrency;
+        _balance = startingBalance;
+        _transactions = transactions;
+        _categories = categories;
+        _coOwnersGuid = coOwnersGuid;
+        
+    }
+
+    public void AddTransaction(Client user, Transaction transaction)
+    {
+        if (OwnerGuid == user.Guid || CoOwnersGuid.Exists(x => x == user.Guid))
         {
-            get
+            if (transaction.Category.UserGuid == OwnerGuid)
             {
-                List<Transaction> result = new List<Transaction>();
-                foreach (Transaction listTransaction in _transactions)
-                {
-                    result.Add(listTransaction);
-
-                }
-
-                return result;
+                Balance += transaction.MoneyAmount * Converter.СomputeTheCoefficient(transaction.Currency, MainCurrency);
+                var newTransaction = new Transaction(Guid, transaction.MoneyAmount, transaction.Currency, transaction.Category, 
+                    transaction.Description, transaction.Date, transaction.Guid);
+                var temp = Transactions;
+                temp.Add(newTransaction);
+                Transactions = temp;
             }
-            set => _transactions = value;
         }
 
-        public List<Category> Categories
+        return;
+    }
+
+    public void EditTransaction(Client user, Transaction uneditedTransaction)
+    {
+        if (OwnerGuid == user.Guid && uneditedTransaction.Category.UserGuid == user.Guid)
         {
-            get => _categories; /*set => _categories = value;*/
-        }
-
-        public decimal Balance
-        {
-            get => _balance;
-            set => _balance = value;
-        }
-
-        public Guid OwnerGuid
-        {
-            get => _ownerGuid;
-            set => _ownerGuid = value;
-        }
-
-        public List<Guid> CoOwnersGuid
-        {
-            get => _coOwnersGuid;
-        }
-
-        public Wallet(Guid ownerGuid, string name, decimal startingBalance, string description, Currency? mainCurrency)
-        {
-            _guid = Guid.NewGuid();
-            _ownerGuid = ownerGuid;
-            _name = name;
-            _startingBalance = startingBalance;
-            _description = description;
-            _mainCurrency = mainCurrency;
-            _balance = startingBalance;
-            _transactions = new List<Transaction>();
-            _categories = new List<Category>();
-            _coOwnersGuid = new List<Guid>();
-        }
-
-        public void AddTransaction(Client user, decimal moneyAmount, Currency currency, Category category, string description,
-            List<string> files, DateTime date)
-        {
-            if (OwnerGuid == user.Guid || CoOwnersGuid.Exists(x => x == user.Guid))
-            {
-                if (category.UserGuid == OwnerGuid)
-                {
-                    Balance += moneyAmount * Converter.СomputeTheCoefficient(currency, MainCurrency);
-                    var newTransaction = new Transaction(Guid, moneyAmount, currency, category, description, files, date);
-                    var temp = Transactions;
-                    temp.Add(newTransaction);
-                    Transactions = temp;
-                }
-            }
-
-            return;
-        }
-
-        public void EditTransaction(Client user, Transaction transaction, decimal moneyAmount, Currency currency,
-            Category category, string description, DateTime date)
-        {
-            if (OwnerGuid == user.Guid && category.UserGuid == user.Guid)
-            {
-                foreach (Transaction listTransaction in Transactions)
-                {
-                    if (listTransaction.Guid == transaction.Guid)
-                    {
-                        Balance -= listTransaction.MoneyAmount *
-                                   Converter.СomputeTheCoefficient(listTransaction.Currency, MainCurrency);
-
-                        listTransaction.MoneyAmount = moneyAmount;
-                        listTransaction.Currency = currency;
-                        listTransaction.Category = category;
-                        listTransaction.Description = description;
-                        listTransaction.Date = date;
-                        Balance += listTransaction.MoneyAmount *
-                                   Converter.СomputeTheCoefficient(listTransaction.Currency, MainCurrency);
-                        return;
-                    }
-                }
-            }
-
-            return;
-        }
-
-        public void DeleteTransaction(Client user, Transaction transaction)
-        {
-            if (OwnerGuid == user.Guid)
-            {
-                foreach (Transaction listTransaction in Transactions)
-                {
-                    if (listTransaction.Guid == transaction.Guid)
-                    {
-                        Balance -= listTransaction.MoneyAmount *
-                                   Converter.СomputeTheCoefficient(listTransaction.Currency, MainCurrency);
-                        var temp = Transactions;
-                        temp.Remove(listTransaction);
-                        Transactions = temp;
-                        return;
-                    }
-                }
-            }
-
-            return;
-        }
-
-
-        public decimal LastMonthIncome()
-        {
-            return LastMonth(true);
-        }
-
-        public decimal LastMonthExpense()
-        {
-            return LastMonth(false);
-        }
-
-        private decimal LastMonth(bool positive)
-        {
-            decimal result = 0.0m;
-            DateTime currentDate = DateTime.UtcNow;
-
             foreach (Transaction listTransaction in Transactions)
             {
-                if (DateTime.Compare(listTransaction.Date.AddMonths(1), currentDate) > 0) //TODO: check this out
+                if (listTransaction.Guid == uneditedTransaction.Guid)
                 {
-                    if ((listTransaction.MoneyAmount > 0 && positive) || (listTransaction.MoneyAmount < 0 && !positive))
-                    {
-                        result += listTransaction.MoneyAmount *
-                                  Converter.СomputeTheCoefficient(listTransaction.Currency, MainCurrency);
-                    }
+                    Balance -= uneditedTransaction.MoneyAmount *
+                               Converter.СomputeTheCoefficient(uneditedTransaction.Currency, MainCurrency);
+
+                    Balance += listTransaction.MoneyAmount *
+                               Converter.СomputeTheCoefficient(listTransaction.Currency, MainCurrency);
+                    return;
                 }
             }
-
-            return result;
         }
 
+        return;
+    }
 
-        public List<Transaction> ShowTenTransactions(int number)
+        public ObservableCollection<Transaction> ShowTenTransactions(int number)
         {
-            _transactions.Sort((x, y) => x.Date.CompareTo(y.Date));
+            _transactions = new ObservableCollection<Transaction>(_transactions.OrderBy((x => x.Date)).ToList());
 
-            List<Transaction> result = new List<Transaction>();
+
+            ObservableCollection<Transaction> result = new ObservableCollection<Transaction>();
             int transactionsShown = 10;
 
             if (number + transactionsShown > Transactions.Count)
@@ -227,23 +169,78 @@ namespace Wallets.BusinessLayer
             return result;
         }
 
-        public override bool Validate()
+        public void DeleteTransaction(Client user, Transaction uneditedTransaction)
+    {
+        if (OwnerGuid == user.Guid)
         {
-            var result = true;
-
-            if (OwnerGuid == Guid.Empty)
-                result = false;
-            if (String.IsNullOrWhiteSpace(Name))
-                result = false;
-            if (StartingBalance < 0)
-                result = false;
-            if (MainCurrency == null)
+            foreach (Transaction listTransaction in Transactions)
             {
-                result = false;
+                if (listTransaction.Guid == uneditedTransaction.Guid)
+                {
+                    Balance -= uneditedTransaction.MoneyAmount *
+                               Converter.СomputeTheCoefficient(uneditedTransaction.Currency, MainCurrency);
+                    var temp = Transactions;
+                    temp.Remove(listTransaction);
+                    Transactions = temp;
+                    return;
+                }
             }
-
-            return result;
         }
+
+        return;
+    }
+
+
+    public decimal LastMonthIncome()
+    {
+        return LastMonth(true);
+    }
+
+    public decimal LastMonthExpense()
+    {
+        return LastMonth(false);
+    }
+
+    private decimal LastMonth(bool positive)
+    {
+        decimal result = 0.0m;
+        DateTime currentDate = DateTime.Now;
+
+        foreach (Transaction listTransaction in Transactions)
+        {
+            if (DateTime.Compare(listTransaction.Date.Value.AddMonths(1), currentDate) > 0) 
+            {
+                if ((listTransaction.MoneyAmount > 0 && positive) || (listTransaction.MoneyAmount < 0 && !positive))
+                {
+                    result += listTransaction.MoneyAmount *
+                              Converter.СomputeTheCoefficient(listTransaction.Currency, MainCurrency);
+                }
+            }
+        }
+
+        return result;
+    }
+
+
+    
+
+    public override bool Validate()
+    {
+        var result = true;
+
+        if (OwnerGuid == Guid.Empty)
+            result = false;
+        if (String.IsNullOrWhiteSpace(Name))
+            result = false;
+        if (StartingBalance < 0)
+            result = false;
+        if (MainCurrency == null)
+        {
+            result = false;
+        }
+
+        return result;
+    }
 
 
 

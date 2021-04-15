@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:Wallets.GUI.WPF"
              xmlns:authentication="clr-namespace:Wallets.GUI.WPF.Authentication"
              xmlns:wallets="clr-namespace:Wallets.GUI.WPF.Wallets"
+             xmlns:wallCategories="clr-namespace:Wallets.GUI.WPF.Wall_Categories"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -21,7 +22,17 @@
         <DataTemplate DataType="{x:Type wallets:AddWalletViewModel}">
             <wallets:AddWalletView></wallets:AddWalletView>
         </DataTemplate>
+
+        <DataTemplate DataType="{x:Type wallCategories:AddUserCategoryViewModel}">
+            <wallCategories:AddUserCategoryView></wallCategories:AddUserCategoryView>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type wallCategories:DeleteUserCategoryViewModel}">
+            <wallCategories:DeleteUserCategoryView></wallCategories:DeleteUserCategoryView>
+        </DataTemplate>
+
     </UserControl.Resources>
+
     <ContentControl Content="{Binding CurrentViewModel}"></ContentControl>
 
 

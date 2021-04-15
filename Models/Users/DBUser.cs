@@ -5,7 +5,7 @@ namespace Wallets.Models.Users
 {
     public class DbUser : IStorable
     {
-        public string Login { get; set; }
+        public string Login { get; set; } 
         public string Password { get; set; }
 
         public Guid Guid { get; }

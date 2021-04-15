@@ -12,9 +12,13 @@ namespace Wallets.GUI.WPF.Navigation
     {
         Auth,
         Wallets,
-        AddWallet
+        AddWallet,
+        WalletDetails,
+
+        AddCategory,
+        DeleteCategory
     }
 
-
-
+  
+   
 }

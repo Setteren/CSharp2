@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Linq;
 
 
 namespace Wallets.BusinessLayer
@@ -21,10 +23,10 @@ namespace Wallets.BusinessLayer
         public Guid Guid { get => _guid; private set => _guid = value; }
         public string FirstName { get => _firstName; set => _firstName = value; }
         public string LastName { get => _lastName; set => _lastName = value; }
-        public string Email { get => _email; set => _email = value; }
-        public string Login { get => _login; set => _login = value; }
+       public string Email { get => _email; set => _email = value; }
+       public string Login { get => _login; set => _login = value; }
 
-        public List<Wallet> Wallets { get => _wallets; }
+        public List<Wallet> Wallets { get => _wallets;}
         public List<Category> Categories { get => _categories; /*set => _categories = value;*/ }
         public List<Wallet> WalletsCoOwnered { get => _walletsCoOwnered;/* set => _walletsCoOwnered = value;*/ }
 
@@ -62,36 +64,6 @@ namespace Wallets.BusinessLayer
                 return result;
             }
         }
-
-        public void AddWallet(string name, decimal startingBalance, string description, Currency mainCurrency)
-        {
-            var newWallet = new Wallet(Guid, name, startingBalance, description, mainCurrency);
-            Wallets.Add(newWallet);
-        }
-
-        public void AddCategory(string name, string description, Color color, Icon icon)
-        {
-            if (!Categories.Exists(x => x.Name == name && x.Description == description))
-            {
-                var newCategory = new Category(Guid, name, description, color, icon);
-                Categories.Add(newCategory);
-            }
-        }
-
-        public void AddWalletCategory(Wallet wallet, Category category)
-        {
-            if (wallet.OwnerGuid == Guid)
-            {
-                if (category.UserGuid == Guid)
-                {
-                    if (!wallet.Categories.Exists(x => x.Name == category.Name && x.Description == category.Description))
-                    {
-                        wallet.Categories.Add(category);
-                    }
-                }
-            }
-        }
-
         public void ShareWallet(Client user, Wallet wallet)
         {
             if (wallet.OwnerGuid == Guid && Guid != user.Guid)
@@ -104,7 +76,39 @@ namespace Wallets.BusinessLayer
             }
         }
 
+        public void AddWalletCategory(Wallet wallet, Category category)
+        {
+            if (wallet.OwnerGuid == Guid)
+            {
+                if (category.UserGuid == Guid)
+                {
+                    if (!wallet.Categories.ToList().Exists(x => x.Name == category.Name && x.Description == category.Description))
+                    {
+                        wallet.Categories.Add(category);
+                    }
+                }
+            }
+        }
 
+        public void AddWallet(string name, decimal startingBalance, string description, Currency mainCurrency)
+        {
+            var newWallet = new Wallet(Guid, name, startingBalance, description, mainCurrency,
+                new ObservableCollection<Transaction>(),new ObservableCollection<Category>(),new List<Guid>());
+            Wallets.Add(newWallet);
+        }
+
+        public void AddCategory(string name,  string description, ColorWrapper colorWrapper, Icon icon)
+        {
+           if (!Categories.Exists(x => x.Name==name && x.Description == description))
+            {
+                var newCategory = new Category(Guid, name, description,colorWrapper,icon, Guid.NewGuid());
+                Categories.Add(newCategory);
+            }           
+        }
+
+     
+
+      
 
 
 
@@ -112,6 +116,10 @@ namespace Wallets.BusinessLayer
         {
             var result = true;
 
+            if (String.IsNullOrWhiteSpace(LastName))
+                result = false;
+            if (String.IsNullOrWhiteSpace(FirstName))
+                result = false;
             if (String.IsNullOrWhiteSpace(Email))
                 result = false;
             if (String.IsNullOrWhiteSpace(Login))

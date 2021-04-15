@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace Wallets.GUI.WPF
 {
@@ -10,6 +12,11 @@ namespace Wallets.GUI.WPF
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Header_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

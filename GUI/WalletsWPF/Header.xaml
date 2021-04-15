@@ -8,7 +8,7 @@
 
     <Border  Background="LightGray">
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <TextBlock Text="WalletMaker" FontSize="36" Margin="5" VerticalAlignment="Center"></TextBlock>
+            <TextBlock Text="My Wallet" FontSize="36" Margin="5" VerticalAlignment="Center"></TextBlock>
         </StackPanel>
     </Border>
 </UserControl>

@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Prism.Mvvm;
 using Wallets.GUI.WPF.Navigation;
 
 namespace Wallets.GUI.WPF.Authentication
 {
 
-    public class AuthViewModel : NavigationBase<AuthNavigatableTypes>, INavigatable<MainNavigatableTypes>
+    public class AuthViewModel: NavigationBase<AuthNavigatableTypes>, INavigatable<MainNavigatableTypes>
     {
         private Action _signInSuccess;
 
@@ -13,7 +16,7 @@ namespace Wallets.GUI.WPF.Authentication
             _signInSuccess = signInSuccess;
             Navigate(AuthNavigatableTypes.SignIn);
         }
-
+        
 
         protected override INavigatable<AuthNavigatableTypes> CreateViewModel(AuthNavigatableTypes type)
         {
@@ -23,9 +26,9 @@ namespace Wallets.GUI.WPF.Authentication
             }
             else
             {
-                return new SignUpViewModel(() => Navigate(AuthNavigatableTypes.SignIn));
+                return  new SignUpViewModel(() => Navigate(AuthNavigatableTypes.SignIn));
             }
-
+            
         }
 
 

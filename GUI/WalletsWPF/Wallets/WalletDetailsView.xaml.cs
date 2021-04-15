@@ -1,4 +1,7 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
 using System.Windows.Controls;
 
 namespace Wallets.GUI.WPF.Wallets
@@ -11,6 +14,11 @@ namespace Wallets.GUI.WPF.Wallets
         public WalletDetailsView()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+
         }
     }
 }

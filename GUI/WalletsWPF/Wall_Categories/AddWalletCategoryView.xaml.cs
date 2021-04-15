@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Wallets.GUI.WPF
+namespace Wallets.GUI.WPF.Wall_Categories
 {
     /// <summary>
-    /// Interaction logic for Header.xaml
+    /// Interaction logic for AddWalletCategoryView.xaml
     /// </summary>
-    public partial class Header : UserControl
+    public partial class AddWalletCategoryView : UserControl
     {
-        public Header()
+        public AddWalletCategoryView()
         {
             InitializeComponent();
         }

@@ -1,12 +1,14 @@
 ﻿
-using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Prism.Mvvm;
+using Wallets.GUI.WPF.Authentication;
+using Wallets.GUI.WPF.Wallets;
 
 namespace Wallets.GUI.WPF.Navigation
 {
-    public abstract class NavigationBase<TObject> : BindableBase where TObject : Enum
+    public abstract class NavigationBase<TObject> : BindableBase where TObject: Enum
     {
 
 

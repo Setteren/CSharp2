@@ -3,51 +3,240 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Wallets.GUI.WPF.Wallets"
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" IsEnabled="{Binding IsEnabled}">
+             d:DesignHeight="850" d:DesignWidth="800" IsEnabled="{Binding IsEnabled}">
+
+
 
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" >
         <StackPanel>
 
 
             <Grid>
-       <Grid.RowDefinitions>
-           <RowDefinition Height="Auto"></RowDefinition>
-           <RowDefinition Height="Auto"></RowDefinition>
-           <RowDefinition Height="Auto"></RowDefinition>
-           <RowDefinition Height="Auto"></RowDefinition>
-           <RowDefinition Height="Auto"></RowDefinition>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
 
-      
-       <StackPanel Grid.Row="0" >
-            <TextBlock Margin=" 10,10,10,5">Name</TextBlock>
-           <TextBox  MinWidth="300" Margin="10" HorizontalAlignment="Stretch"  Text="{Binding Name, UpdateSourceTrigger=LostFocus  }"></TextBox>
-       </StackPanel>
 
-       <StackPanel Grid.Row="1" >
-           <TextBlock Margin=" 10,10,10,5">Description</TextBlock>
-           <TextBox  MinWidth="300" Margin="10" HorizontalAlignment="Stretch"  Text="{Binding Description, UpdateSourceTrigger=LostFocus  }"></TextBox>
-       </StackPanel>
+                <StackPanel Grid.Row="0" >
+                    <TextBlock Margin=" 10,10,10,5">Name</TextBlock>
+                    <TextBox  MinWidth="300" Margin="10" HorizontalAlignment="Stretch"  Text="{Binding Name, UpdateSourceTrigger=LostFocus  }"></TextBox>
+                </StackPanel>
 
-        <StackPanel Grid.Row="2" >
-            <TextBlock Margin=" 10,10,10,5">Balance</TextBlock>
+                <StackPanel Grid.Row="1" >
+                    <TextBlock Margin=" 10,10,10,5">Description</TextBlock>
+                    <TextBox  MinWidth="300" Margin="10" HorizontalAlignment="Stretch"  Text="{Binding Description, UpdateSourceTrigger=LostFocus  }"></TextBox>
+                </StackPanel>
+
+                <StackPanel Grid.Row="2" >
+                    <TextBlock Margin=" 10,10,10,5">Balance</TextBlock>
                     <TextBox Name="TbBalance"  MinWidth="300" Margin="10" HorizontalAlignment="Stretch" IsReadOnly="True" Text="{Binding Balance ,Mode=TwoWay,UpdateSourceTrigger=LostFocus }"></TextBox>
-       </StackPanel>
+                </StackPanel>
 
-       <StackPanel Grid.Row="3" >
-            <TextBlock Margin=" 10,10,10,5">Main currency</TextBlock>
-           <TextBox  MinWidth="300" Margin="10" HorizontalAlignment="Stretch"  Text="{Binding MainCurrency, UpdateSourceTrigger=LostFocus  }"></TextBox>
-       </StackPanel>
+                <StackPanel Grid.Row="3" >
+                    <TextBlock Margin=" 10,10,10,5">Main currency</TextBlock>
+                    <ComboBox Name="CurrencyList" SelectedIndex="0"  Text="{Binding MainCurrency}" Margin=" 10,0,10,15"  VerticalAlignment="Top">
+                        <TextBlock>USD</TextBlock>
+                        <TextBlock>EUR</TextBlock>
+                        <TextBlock>UAH</TextBlock>
+                        <TextBlock>RUB</TextBlock>
+                    </ComboBox>
+                </StackPanel>
 
 
-                <Button Grid.Row="4"  Margin=" 10,10,10,5" Width="200" Command="{Binding SubmitChangesCommand}">Submit changes</Button>
+                <StackPanel Grid.Row="4">
+                    <Button   Margin=" 10,10,10,5" Width="200" Command="{Binding SubmitChangesCommand}">Submit changes</Button>
+                    <Separator Height="10" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Background="Black" />
+                </StackPanel>
+
+                <Grid Grid.Row="5" Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" MinHeight="100"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Row="0"  Grid.Column="0" >
+                        <TextBlock Margin=" 10,10,10,5">Added categories:</TextBlock>
+                        <ListView  Margin="10"  ItemsSource="{Binding WalletCategoriesAdded}" DisplayMemberPath="Name"></ListView>
+                    </StackPanel>
+
+                    <Button Grid.Row="0" Grid.Column="1" Margin="15,25,15,42"  Command="{Binding AddWalletCategoryCommand}">Add category to wallet</Button>
+
+                    <ComboBox Grid.Row="0" Grid.Column="2" Width="300" Name="WalletCategoriesAvailable" Margin="15,25,15,50" ItemsSource="{Binding WalletCategoriesAvailable}"
+                              DisplayMemberPath="Name" SelectedItem="{Binding SelectedCategory}"/>
 
 
-    </Grid>
+                    <!-- LIST OF TRANSACTIONS -->
+                    <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition MinWidth="100"></ColumnDefinition>
+                            <ColumnDefinition Width="2"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
 
-            </StackPanel>
-        </ScrollViewer>
-  
+
+                        <StackPanel Grid.Row="0"  Grid.Column="0">
+                            <TextBlock Margin=" 10,10,10,5">List of transactions:</TextBlock>
+                            <ScrollViewer>
+                                <ListView   MaxWidth="300" ItemsSource="{Binding TenTransactions, Mode=TwoWay}" DisplayMemberPath="DisplayTransactionName"
+                                           ScrollViewer.HorizontalScrollBarVisibility="Visible" SelectedItem="{Binding CurrentTransaction}">
+                                </ListView>
+                            </ScrollViewer>
+
+
+
+                            <!-- SHOWING TRANSACTIONS -->
+                            <TextBlock Margin=" 10,10,10,5">Show from:</TextBlock>
+                            <TextBox  Width="50" Margin="10" HorizontalAlignment="Stretch"  Text="{Binding BeginningOfTransactionList, UpdateSourceTrigger=LostFocus  }"></TextBox>
+                            <Button  Margin="10" HorizontalAlignment="Stretch"  Command="{Binding ShowTransactionsCommand}">Show transactions</Button>
+
+                        </StackPanel>
+
+                        <GridSplitter Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch"></GridSplitter>
+                        <!--Details-->
+                        <ScrollViewer Grid.Row="0" Grid.Column="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" >
+                            <StackPanel>
+
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"></RowDefinition>
+                                        <RowDefinition Height="Auto"></RowDefinition>
+                                        <RowDefinition Height="Auto"></RowDefinition>
+                                        <RowDefinition Height="Auto"></RowDefinition>
+                                        <RowDefinition Height="Auto"></RowDefinition>
+                                        <RowDefinition Height="Auto"></RowDefinition>
+                                    </Grid.RowDefinitions>
+
+                                    <StackPanel Grid.Row="0" >
+                                        <TextBlock Margin=" 10,10,10,5">Amount of money</TextBlock>
+                                        <TextBox  MinWidth="300" Margin="10" HorizontalAlignment="Stretch"  Text="{Binding CurrentTransaction.MoneyAmount, UpdateSourceTrigger=LostFocus  }"></TextBox>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Row="1" >
+                                        <TextBlock Margin=" 10,10,10,5">Currency</TextBlock>
+                                        <ComboBox  Text="{Binding CurrentTransaction.Currency}" Margin=" 10,0,10,15"  VerticalAlignment="Top">
+                                            <TextBlock>USD</TextBlock>
+                                            <TextBlock>EUR</TextBlock>
+                                            <TextBlock>UAH</TextBlock>
+                                            <TextBlock>RUB</TextBlock>
+                                        </ComboBox>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Row="2" >
+                                        <TextBlock Margin=" 10,10,10,5">Category</TextBlock>
+                                        <ComboBox  ItemsSource="{Binding WalletCategoriesAdded}" DisplayMemberPath="Name" Text="{Binding CurrentTransaction.Category.Name}" Margin=" 10,0,10,15"  VerticalAlignment="Top">
+
+                                        </ComboBox>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Row="3" >
+                                        <TextBlock Margin=" 10,10,10,5">Description</TextBlock>
+                                        <TextBox  MinWidth="300" Margin="10" HorizontalAlignment="Stretch"  Text="{Binding CurrentTransaction.Description, UpdateSourceTrigger=LostFocus  }"></TextBox>
+                                    </StackPanel>
+
+                                    <!-- TODO: MAKE IT DATE FORMAT -->
+                                    <StackPanel Grid.Row="4" >
+                                        <TextBlock Margin=" 10,10,10,5">Date</TextBlock>
+                                        <DatePicker MinWidth="300" Margin="10" HorizontalAlignment="Stretch"  SelectedDate="{Binding CurrentTransaction.Date, UpdateSourceTrigger=LostFocus}" SelectedDateFormat="Short" ></DatePicker>
+                                    </StackPanel>
+
+                                    <Button Grid.Row="5" Margin="5" Command="{Binding EditTransactionCommand}">Edit transaction</Button>
+                                </Grid>
+                            </StackPanel>
+                        </ScrollViewer>
+
+                        <!-- DELETE TRANSACTION -->
+                    </Grid>
+                    <Button Grid.Row="2" Grid.Column="1"  Background="DarkRed"  Margin="15" Command="{Binding DeleteTransactionCommand}">Delete transaction</Button>
+
+
+                    <!--  <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
+                        <Button Width="200" Margin="5" Command="{Binding EditWalletTransaction}" >Edit transaction</Button>
+                         <Separator Height="10" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Background="Black" />
+                   </StackPanel>   -->
+                </Grid>
+
+
+                <!-- ADDING TRANSACTION -->
+                <Grid Grid.Row="6">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" >
+                        <Separator Height="10" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Background="Black" />
+                        <TextBlock Margin=" 10,10,10,5">Amount of money:</TextBlock>
+                        <TextBox  MinWidth="300" Margin="10" HorizontalAlignment="Stretch"  Text="{Binding AddTransactionMoneyAmount, UpdateSourceTrigger=LostFocus  }"></TextBox>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1" >
+                        <TextBlock Margin=" 10,10,10,5">Currency</TextBlock>
+                        <ComboBox SelectedIndex="0"  Text="{Binding AddTransactionCurrency}" Margin=" 10,0,10,15"  VerticalAlignment="Top">
+                            <TextBlock>USD</TextBlock>
+                            <TextBlock>EUR</TextBlock>
+                            <TextBlock>UAH</TextBlock>
+                            <TextBlock>RUB</TextBlock>
+                        </ComboBox>
+                    </StackPanel>
+
+
+
+                    <StackPanel Grid.Row="2" >
+                        <TextBlock Margin=" 10,10,10,5">Category</TextBlock>
+                        <ComboBox  SelectedIndex="0"  ItemsSource="{Binding WalletCategoriesAdded}" DisplayMemberPath="Name" SelectedItem="{Binding AddTransactionCategory}" 
+                                   Margin=" 10,0,10,15"  VerticalAlignment="Top"></ComboBox>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="3" >
+                        <TextBlock Margin=" 10,10,10,5">Description</TextBlock>
+                        <TextBox  MinWidth="300" Margin="10" HorizontalAlignment="Stretch"  Text="{Binding AddTransactionDescription, UpdateSourceTrigger=LostFocus  }"></TextBox>
+                    </StackPanel>
+
+                    <!-- TODO: MAKE IT DATE FORMAT -->
+                    <StackPanel Grid.Row="4" >
+                        <TextBlock Margin=" 10,10,10,5">Date</TextBlock>
+                        <DatePicker MinWidth="300" Margin="10" HorizontalAlignment="Stretch"  SelectedDate="{Binding AddTransactionDate, UpdateSourceTrigger=LostFocus}"  SelectedDateFormat="Short" ></DatePicker>
+                    </StackPanel>
+
+                    <Button Grid.Row="5"  Margin="15" Command="{Binding AddTransactionCommand}">Add transaction</Button>
+                </Grid>
+
+                <StackPanel Grid.Row="7">
+                    <TextBlock Margin="10">Starting balance:</TextBlock>
+                    <TextBlock Text="{Binding FromWallet.StartingBalance}" />
+                    <TextBlock Margin="10">Last month income:</TextBlock>
+                    <TextBlock Text="{Binding LastMonthIncome}" />
+                    <TextBlock Margin="10">Last month expense:</TextBlock>
+                    <TextBlock Text="{Binding LastMonthExpense}" />
+                </StackPanel>
+
+
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+
 </UserControl>

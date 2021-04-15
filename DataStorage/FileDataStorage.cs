@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.Json;
+using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Wallets.DataStorage
 {
-    public class FileDataStorage<TObject> where TObject : class, IStorable
+    public class FileDataStorage<TObject> where TObject: class, IStorable
     {
         private static readonly string BaseFolder = Path.Combine(Environment.GetFolderPath
-            (Environment.SpecialFolder.ApplicationData), "BudgetsStorage", typeof(TObject).Name);
+            (Environment.SpecialFolder.ApplicationData),"BudgetsStorage", typeof(TObject).Name);
 
         public FileDataStorage()
         {
@@ -18,6 +20,49 @@ namespace Wallets.DataStorage
                 Directory.CreateDirectory(BaseFolder);
             }
         }
+
+
+        public async Task AddOrUpdateAsync(TObject obj)
+        {
+            string stringObject = JsonConvert.SerializeObject(obj);
+
+            string filePath = Path.Combine(BaseFolder, obj.Guid.ToString(format:"N"));
+
+            using (StreamWriter sw = new StreamWriter(filePath, false))//false to overwrite the file every time
+            {
+                await sw.WriteAsync(stringObject);
+            } 
+
+        }
+
+        public void Delete(TObject obj)
+        {
+            string filePath = Path.Combine(BaseFolder, obj.Guid.ToString(format: "N"));
+
+                File.Delete(filePath);
+        }
+
+
+
+        public async Task<TObject> GetAsync(Guid guid)
+        {
+            string stringObject = null;
+
+            string filePath = Path.Combine(BaseFolder, guid.ToString(format:"N"));
+            if (!File.Exists(filePath))
+            {
+                return null;
+            }
+
+            using (StreamReader sr = new StreamReader(filePath))
+            {
+                stringObject = await sr.ReadToEndAsync();
+            }
+
+            
+            return JsonConvert.DeserializeObject<TObject>(stringObject);
+        }
+
 
         public async Task<List<TObject>> GetAllAsync()
         {
@@ -34,55 +79,11 @@ namespace Wallets.DataStorage
                     stringObject = await sr.ReadToEndAsync();
                 }
 
-                res.Add(JsonSerializer.Deserialize<TObject>(stringObject));
+                res.Add(JsonConvert.DeserializeObject<TObject>(stringObject));
             }
 
             return res;
         }
-        public async Task<TObject> GetAsync(Guid guid)
-        {
-            string stringObject = null;
-
-            string filePath = Path.Combine(BaseFolder, guid.ToString(format: "N"));
-            if (!File.Exists(filePath))
-            {
-                return null;
-            }
-
-            using (StreamReader sr = new StreamReader(filePath))
-            {
-                stringObject = await sr.ReadToEndAsync();
-            }
-
-            return JsonSerializer.Deserialize<TObject>(stringObject);
-        }
-        public void Delete(TObject obj)
-        {
-            string filePath = Path.Combine(BaseFolder, obj.Guid.ToString(format: "N"));
-
-            File.Delete(filePath);
-        }
-
-        public async Task AddOrUpdateAsync(TObject obj)
-        {
-            string stringObject = JsonSerializer.Serialize(obj);
-
-            string filePath = Path.Combine(BaseFolder, obj.Guid.ToString(format: "N"));
-
-            using (StreamWriter sw = new StreamWriter(filePath, false))
-            {
-                await sw.WriteAsync(stringObject);
-            }
-
-        }
-
-
-
-
-
-
-
-
 
 
 

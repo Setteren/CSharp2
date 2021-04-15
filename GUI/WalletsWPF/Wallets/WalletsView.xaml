@@ -25,6 +25,8 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -41,14 +43,20 @@
 
        <GridSplitter Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch"></GridSplitter>
        <!--Details-->
-       <ContentControl Grid.Row="0" Grid.Column="2" Grid.RowSpan="4" Content="{Binding CurrentWallet}"></ContentControl>
+       <ContentControl Grid.Row="0" Grid.Column="2" Grid.RowSpan="6" Content="{Binding CurrentWallet}"></ContentControl>
 
-       <!--Add-->
-        <Button Grid.Row="1" Grid.Column="0" Command="{Binding AddWalletCommand}">Add wallet:</Button>
-       <!--Delete-->
-        <Button Grid.Row="2" Grid.Column="0" Command="{Binding DeleteWalletCommand}">Delete wallet:</Button>
-       <!--Log out-->
-        <Button Grid.Row="3" Grid.Column="0" Command="{Binding SignInCommand}">Log out:</Button>
+       <!--Add wallet-->
+        <Button Grid.Row="1" Grid.Column="0" Margin="2" Command="{Binding AddWalletCommand}">Add wallet:</Button>
+       <!--Delete wallet-->
+        <Button Grid.Row="2" Grid.Column="0" Margin="2" Command="{Binding DeleteWalletCommand}">Delete wallet:</Button>
+
+        <!--Add category-->
+        <Button Grid.Row="3" Grid.Column="0" Margin="2" Command="{Binding AddUserCategoryCommand}">Add category:</Button>
+       <!--Delete category-->
+        <Button Grid.Row="4" Grid.Column="0" Margin="2" Command="{Binding DeleteUserCategoryCommand}">Delete category:</Button>
+
+        <!--Log out-->
+        <Button Grid.Row="5" Grid.Column="0" Margin="2" Command="{Binding SignInCommand}">Log out:</Button>
 
     </Grid>
   

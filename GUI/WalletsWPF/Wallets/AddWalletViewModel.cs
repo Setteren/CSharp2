@@ -1,8 +1,12 @@
-﻿using Prism.Commands;
-using Prism.Mvvm;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Prism.Commands;
+using Prism.Mvvm;
 using Wallets.BusinessLayer;
 using Wallets.GUI.WPF.Navigation;
 using Wallets.Services;
@@ -13,12 +17,12 @@ namespace Wallets.GUI.WPF.Wallets
     public class AddWalletViewModel : BindableBase, INavigatable<MainNavigatableTypes>
     {
         private WalletService _service;
-
+       
         private Action _gotoWallets;
         private Wallet _wallet;
         private bool _isEnabled = true;
 
-
+        //public Wallet FromWallet { get { return _wallet; } }
 
 
         public bool IsEnabled
@@ -88,10 +92,11 @@ namespace Wallets.GUI.WPF.Wallets
             }
         }
 
-
+    
         public AddWalletViewModel(Action gotoWallets)
         {
-            _wallet = new Wallet(Guid.NewGuid(), "", 0.0m, "", Currency.USD);
+            _wallet = new Wallet(Guid.NewGuid(),"",0.0m,"",Currency.USD, 
+                new ObservableCollection<Transaction>(), new ObservableCollection<Category>(), new List<Guid>());
 
             _service = new WalletService();
             _gotoWallets = gotoWallets;
@@ -103,10 +108,10 @@ namespace Wallets.GUI.WPF.Wallets
         public DelegateCommand AddWalletCommand { get; }
 
 
-
+        //TODO: MAKE ADDING WALLET REALLY ASYNC
         public async void AddWallet()
         {
-
+           
 
             try
             {
@@ -118,8 +123,8 @@ namespace Wallets.GUI.WPF.Wallets
                     return;
                 }
 
-                Wallet addWallet = new Wallet(Guid.NewGuid(), _wallet.Name, _wallet.Balance, _wallet.Description, _wallet.MainCurrency);
-                addWallet.OwnerGuid = MainInfo.User.Guid;
+                Wallet addWallet = new Wallet(MainInfo.User.Guid, _wallet.Name, _wallet.Balance, _wallet.Description, _wallet.MainCurrency,
+                    _wallet.Transactions,_wallet.Categories,_wallet.CoOwnersGuid);
                 await Task.Run(() => _service.AddOrUpdateWalletAsync(addWallet));
                 WalletsViewModel.Wallets.Add(new WalletDetailsViewModel(addWallet));
                 MainInfo.User.Wallets.Add(addWallet);
@@ -156,11 +161,6 @@ namespace Wallets.GUI.WPF.Wallets
             _wallet.Description = "";
             _wallet.MainCurrency = Currency.USD;
         }
-
-
-        //public delegate void AddWalletMethod();
-        // public event AddWalletMethod addWall;
-
 
     }
 }
